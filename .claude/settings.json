@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "parkin-third-party": {
+      "source": { "source": "github", "repo": "MattParkin14/Claude-skills" }
+    }
+  },
+  "enabledPlugins": {
+    "mattpocock-skills@parkin-third-party": true
+  }
+}

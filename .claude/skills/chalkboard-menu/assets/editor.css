@@ -1,0 +1,71 @@
+/* Chalkboard menu — editor chrome only.
+   Deliberately quiet: the board is the thing being looked at. */
+
+:root{
+  --panel:#EFEFE9; --ink:#20231D; --ink-soft:#5C6058; --rule:#C4C6BC;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--page);color:var(--ink);
+     font:400 15px/1.55 Archivo,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.bar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+     padding:14px 22px;border-bottom:1px solid var(--rule);background:var(--panel)}
+.mark{display:flex;align-items:baseline;gap:9px;margin-right:auto}
+.mark b{font:600 15px/1 Archivo;letter-spacing:.01em}
+.mark span{font-size:12px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.ctl{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)}
+.swatches{display:flex;gap:6px}
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.28);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--panel),0 0 0 3px var(--brass)}
+.btn{font:500 12.5px Archivo;color:var(--ink);background:transparent;
+     border:1px solid var(--rule);border-radius:2px;padding:6px 11px;cursor:pointer}
+.btn:hover{border-color:var(--brass);color:var(--brass)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+.wrap{display:grid;grid-template-columns:minmax(320px,4fr) 6fr;min-height:calc(100vh - 56px)}
+.pane{padding:22px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:14px}
+.pane h2{font:600 12px Archivo;letter-spacing:.1em;text-transform:uppercase;
+         color:var(--ink-soft);margin:0}
+textarea{flex:1;min-height:300px;width:100%;resize:vertical;tab-size:2;padding:16px;
+  font:400 13.5px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink);
+  background:var(--panel);border:1px solid var(--rule);border-radius:2px}
+textarea:focus{outline:none;border-color:var(--brass);box-shadow:inset 0 0 0 1px var(--brass)}
+.key{font-size:12.5px;line-height:1.9;color:var(--ink-soft);
+     border-top:1px solid var(--rule);padding-top:12px}
+.key code{font:400 12px ui-monospace,Menlo,monospace;color:var(--ink);
+          background:rgba(0,0,0,.05);padding:1px 5px;border-radius:2px}
+.hint{font-size:12.5px;color:var(--ink-soft);margin:0;min-height:1.2em}
+details{font-size:12.5px;color:var(--ink-soft)}
+summary{cursor:pointer;padding:4px 0}
+pre{font:400 11.5px/1.6 ui-monospace,Menlo,monospace;background:var(--panel);
+    border:1px solid var(--rule);padding:12px;overflow:auto;max-height:140px;
+    white-space:pre-wrap;word-break:break-all;margin:6px 0 0}
+
+.stage{padding:26px 30px 34px;
+       background:radial-gradient(120% 80% at 50% 0%,#E6E7DF 0%,var(--page) 70%)}
+.options{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:760px;margin:0 auto 26px}
+.opt{background:none;border:0;padding:0;cursor:pointer;text-align:left;font:inherit}
+.opt figcaption{margin-top:7px;font-size:11.5px;color:var(--ink-soft);line-height:1.35}
+.opt figcaption b{display:block;font:500 12.5px Archivo;color:var(--ink)}
+.opt[aria-pressed="true"] figcaption b{color:var(--brass)}
+.opt[aria-pressed="true"] .frame{outline:1.5px solid var(--brass);outline-offset:5px}
+
+.mini{max-width:none;margin:0;box-shadow:0 6px 14px -8px rgba(20,25,20,.5)}
+.board.mini{padding:11px 12px;box-shadow:0 0 12px rgba(0,0,0,.5) inset}
+.e-drawn .board.mini{padding:15px 16px}
+.e-drawn .board.mini::before{inset:6px;outline-offset:3px;border-width:1.5px}
+.mini .l{background:rgba(242,237,228,.82);border-radius:1px;filter:url(#chalk)}
+.mini .l1{height:9px;width:66%;margin:0 auto 8px}
+.mini .l2{height:4px;width:100%;margin:0 0 5px;opacity:.55}
+.mini .l3{height:4px;width:78%;margin:0 0 5px;opacity:.55}
+.mini .l4{height:4px;width:88%;opacity:.55}
+
+@media (max-width:920px){
+  .wrap{grid-template-columns:1fr}
+  .pane{border-right:0;border-bottom:1px solid var(--rule)}
+  .stage{padding:18px 14px 24px}
+  .options{grid-template-columns:repeat(2,1fr)}
+}
+@media print{ .bar,.pane,.options{display:none!important} .wrap{display:block} .stage{padding:0;background:#fff} }

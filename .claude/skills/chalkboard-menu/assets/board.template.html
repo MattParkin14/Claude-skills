@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{VENUE}} — menu</title>
+<meta name="description" content="Menu for {{VENUE}}.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="board.css">
+<style>
+  html,body{margin:0}
+  body{background:radial-gradient(120% 80% at 50% 0%,#E6E7DF 0%,var(--page) 70%);
+       min-height:100vh;padding:34px 20px;
+       font:400 15px/1.55 Archivo,system-ui,sans-serif}
+  .legible{display:block;margin:20px auto 0;font:500 12.5px Archivo,sans-serif;
+           color:#5C6058;background:transparent;border:1px solid #C4C6BC;
+           border-radius:2px;padding:7px 13px;cursor:pointer}
+  .legible:hover{border-color:var(--brass);color:var(--brass)}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  @media print{ body{background:#fff;padding:0} }
+</style>
+
+<body class="t-{{TINT}}">
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <filter id="chalk" x="-6%" y="-14%" width="112%" height="128%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4" seed="12" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.7"
+                       xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<main class="frame e-{{EDGE}}">
+  <div class="board">
+    <div class="smudge" style="width:180px;height:70px;top:14%;left:8%"></div>
+    <div class="smudge" style="width:230px;height:60px;bottom:22%;right:6%"></div>
+    <div id="out"></div>
+  </div>
+</main>
+
+<button class="legible no-print" id="legible" aria-pressed="false">Easier to read</button>
+
+<script id="menu-data" type="application/json">{{MENU_JSON}}</script>
+<script src="parser.js"></script>
+<script>
+  var data = JSON.parse(document.getElementById('menu-data').textContent);
+  document.getElementById('out').innerHTML =
+    renderMenu(parseMenu(data.source), {updated: data.updated, emptyText: 'Menu coming soon.'});
+
+  document.getElementById('legible').onclick = function(e){
+    var on = document.body.classList.toggle('plain');
+    e.currentTarget.setAttribute('aria-pressed', String(on));
+    e.currentTarget.textContent = on ? 'Back to the board' : 'Easier to read';
+  };
+</script>
+</body>
+</html>
