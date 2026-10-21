@@ -1,0 +1,119 @@
+/* Chalkboard menu — board styles.
+   Shared by the public board page and the editor preview. */
+
+:root{
+  --board:#1E2723;          /* overridden by the tint class on <body> */
+  --chalk:#F2EDE4;
+  --page:#DDDED6;
+  --brass:#8A6D33;
+}
+
+/* ---------- tints ---------- */
+.t-slate    {--board:#1E2723}
+.t-charcoal {--board:#22211F}
+.t-navy     {--board:#1A2230}
+
+/* ---------- edge treatments ----------
+   Applied to .frame. Only one at a time. See references/edges.md. */
+.frame{
+  width:100%;max-width:760px;margin:0 auto;border-radius:3px;
+  box-shadow:0 18px 38px -20px rgba(20,25,20,.5);
+}
+.e-drawn{padding:0}
+.e-bleed{padding:0}
+.e-steel{
+  padding:5px;background:linear-gradient(#41464A,#22262A);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 18px 38px -20px rgba(20,25,20,.55);
+}
+.e-brass{
+  padding:10px;border:1px solid rgba(154,123,63,.85);
+  box-shadow:0 18px 38px -22px rgba(20,25,20,.35);
+}
+
+/* ---------- the slate ---------- */
+.board{
+  position:relative;overflow:hidden;border-radius:2px;padding:36px 34px 30px;
+  color:var(--chalk);
+  background:
+    radial-gradient(130% 95% at 50% 0%,rgba(255,255,255,.055),rgba(0,0,0,0) 62%),
+    radial-gradient(110% 110% at 50% 55%,rgba(0,0,0,0) 45%,rgba(0,0,0,.42) 100%),
+    var(--board);
+  box-shadow:0 0 26px rgba(0,0,0,.5) inset;
+}
+/* slate grain — the thing that stops it reading as a black div */
+.board::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+.smudge{position:absolute;border-radius:50%;background:rgba(242,237,228,.055);
+        filter:blur(16px);pointer-events:none}
+
+/* the drawn rule is chalked onto the slate, not built around it */
+.e-drawn .board{padding:46px 44px 40px}
+.e-drawn .board::before{
+  content:"";position:absolute;inset:15px;pointer-events:none;
+  border:2px solid rgba(242,237,228,.5);filter:url(#chalk);
+  outline:1px solid rgba(242,237,228,.28);outline-offset:5px;
+}
+
+/* ---------- chalk type ---------- */
+.ink{position:relative;animation:chalkin .55s ease-out both}
+@keyframes chalkin{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:none}}
+
+.title{
+  font:700 clamp(38px,6.4vw,62px)/.94 'Amatic SC',cursive;letter-spacing:.045em;
+  text-align:center;margin:0 0 6px;text-shadow:0 0 14px rgba(242,237,228,.2);
+  filter:url(#chalk);
+}
+.rule{height:0;border-bottom:2px solid rgba(242,237,228,.4);width:120px;
+      margin:0 auto 26px;filter:url(#chalk)}
+.cols{columns:2;column-gap:44px}
+.sec{break-inside:avoid;margin:0 0 24px}
+.sec h2{
+  font:700 clamp(24px,3vw,31px)/1 'Amatic SC',cursive;letter-spacing:.1em;margin:0 0 12px;
+  color:rgba(242,237,228,.94);text-shadow:0 0 10px rgba(242,237,228,.18);
+  filter:url(#chalk);transform:rotate(-.4deg);
+}
+.item{display:flex;align-items:baseline;gap:6px;font:600 21px/1.3 Caveat,cursive;filter:url(#chalk)}
+.item .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .lead{flex:1;border-bottom:2px dotted rgba(242,237,228,.3);
+            transform:translateY(-5px);min-width:16px}
+.item .pr{white-space:nowrap}
+.desc{font:500 16px/1.35 Caveat,cursive;color:rgba(242,237,228,.68);
+      margin:1px 0 13px;max-width:34ch}
+.notice{
+  margin:6px 0 0;padding-top:16px;border-top:2px solid rgba(242,237,228,.22);
+  font:700 clamp(19px,2.4vw,24px)/1.25 'Amatic SC',cursive;letter-spacing:.07em;
+  text-align:center;filter:url(#chalk);
+}
+.stamp{margin-top:18px;text-align:right;font:500 14px Caveat,cursive;
+       color:rgba(242,237,228,.42);transform:rotate(-.6deg)}
+.empty{font:500 18px Caveat,cursive;color:rgba(242,237,228,.5);text-align:center;padding:30px 0}
+
+/* ---------- plain mode ----------
+   Legibility fallback. Ship the toggle on every board — hand lettering at
+   14px on a phone in a dark bar is the most common real complaint. */
+.plain .title,.plain .sec h2,.plain .item,.plain .notice,.plain .rule{filter:none}
+.plain .title{font:600 34px/1.1 Archivo,sans-serif;letter-spacing:.02em;text-shadow:none}
+.plain .sec h2{font:600 14px Archivo,sans-serif;letter-spacing:.14em;
+               text-transform:uppercase;transform:none;text-shadow:none}
+.plain .item{font:500 16px/1.4 Archivo,sans-serif}
+.plain .desc{font:400 13.5px/1.45 Archivo,sans-serif;color:rgba(242,237,228,.8)}
+.plain .notice{font:500 14px Archivo,sans-serif;letter-spacing:.06em}
+.plain .board{color:#fff}
+.plain .stamp{font:400 12px Archivo,sans-serif}
+
+@media (max-width:920px){ .cols{columns:1} }
+@media (prefers-reduced-motion:reduce){ .ink,.frame{animation:none} }
+
+/* ---------- print: the door poster, on paper not slate ---------- */
+@media print{
+  .board::after,.board::before,.smudge,.no-print{display:none!important}
+  .frame{max-width:none;padding:0;background:none;border:0;box-shadow:none;animation:none}
+  .board{background:#fff;color:#111;box-shadow:none;padding:0}
+  .desc{color:#555}
+  .item .lead{border-color:#bbb}
+  .title,.sec h2,.item,.notice,.rule{filter:none}
+  .rule{border-color:#111}
+  .sec h2{color:#111}
+}

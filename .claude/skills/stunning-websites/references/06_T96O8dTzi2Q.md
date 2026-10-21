@@ -1,0 +1,17 @@
+# Turn Generic AI Websites into PRO Level Work / NO MORE AI SLOP
+Sergei Chyrkov · 30 Jul 2026 · 48k views · https://www.youtube.com/watch?v=T96O8dTzi2Q
+(FULL transcript, user-supplied)
+
+Thesis: "The difference wasn't just a better prompt. **It was the design process.**"
+
+## Tactics
+
+- **Have Claude write your spec prompt for you.** In ordinary Claude chat, describe the project in a few words and ask it to "create a detailed prompt and .md file". Download that .md and feed it to Claude Design with just the word "implement". Reason given: "because I'm lazy and I don't want to write this whole huge prompt by myself."
+- **Deliberately generate the no-design-system version first, and look at it honestly.** He builds with no template and no design system on purpose to establish the baseline. Verdict on it: "for most people it would look okay, but if you have a designer's eye you'll understand this looks a bit generic" - SVG-style illustrations being the tell. Also found real functional gaps (crust selector not changing, no drag-and-drop) - **interact with the build, don't just look at it.**
+- **Source inspiration from Pinterest or Mobbin, and say why you like it** (he picked an image specifically for its typography). Explicit ethics line: "we're not copying anyone's work, we're just using it for inspiration."
+- **The design-system creation tool is the most valuable thing in Claude Design** ("this would take me a few days to build in Figma"). It can be seeded from: a connected GitHub project, a local codebase, a Figma file, or **visual assets** (he drags in the single inspiration image). Output includes navigation, fonts, numeric scale, structure, references/ideas, colour blobs and shapes, wordmark/logo, brand colours, animations, elevations, radii, and a landing-page style.
+- **Apply the design system to the EXISTING project rather than regenerating.** Attach it via the plus icon, then a prompt that combines system + specific structural asks: *"Update the website design layout using design system. Hero screen should be full viewport. Add some parallax on scroll animations with pizzas and ingredients."* Result: full-screen hero, custom cursor, parallax (tweakable by factor), a horizontal-scroll section, text animations, full-screen footer.
+- **Swap SVG illustrations for real/generated photography.** He generated three people photos in ChatGPT and asked for the pizza illustration to be replaced with a real photo - his own remaining criticism of the final build is the illustrations he didn't replace.
+- **Claude Design burns tokens fast (he hit his limit mid-video). Lock the layout in Design, then hand off to Claude Code on a cheaper model** (he used Sonnet 5 for the code build) "because we have the designs in Claude Design" - the expensive reasoning already happened.
+- Handoff path: share -> more formats and apps -> Claude Code (local agent), or web session, or GitHub, or download zip for Cursor.
+- **Reuse the same design system for non-website assets.** Generated a matching menu (it asked clarifying questions: single page? which categories? how many items? photos or type-only?) and a set of Instagram posts. "The most important thing is that we have our design system consistent everywhere - in our posts, in our website, and now our menu." His own honest caveat: the social posts are "really simple, I would work with them a little bit more" - fine for non-designers.

@@ -1,0 +1,12 @@
+{
+  "name": "parkin-third-party",
+  "owner": { "name": "Matthew Parkin" },
+  "description": "Third-party skill plugins vendored into this repo. Each lives in its own folder under third-party/.",
+  "plugins": [
+    {
+      "name": "mattpocock-skills",
+      "source": "./third-party/mattpocock-skills",
+      "description": "Matt Pocock's skills (github.com/mattpocock/skills), vendored copy. See third-party/mattpocock-skills/SOURCE.md."
+    }
+  ]
+}

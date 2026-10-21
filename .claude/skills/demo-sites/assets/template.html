@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>{{BUSINESS_NAME}}</title>
+<meta name="description" content="{{TAGLINE}}">
+<meta name="theme-color" content="{{ACCENT}}">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+:root{
+  /* Pull --accent from their actual signage or logo, not from taste. */
+  --accent:{{ACCENT}};
+  --accent-ink:{{ACCENT_INK}};      /* text colour that passes contrast ON --accent */
+  --ink:#16130F;
+  --muted:#6B6459;
+  --paper:#FBF9F6;                  /* warm off-white, not pure white */
+  --line:rgba(22,19,15,.10);
+  --radius:14px;
+  --pad:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font:400 16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding-bottom:76px;                /* clears the sticky bar */
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:78svh;display:flex;align-items:flex-end;overflow:hidden}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,8,6,.88) 0%,rgba(10,8,6,.45) 45%,rgba(10,8,6,.15) 100%);
+}
+.hero-body{position:relative;z-index:1;padding:var(--pad);padding-bottom:28px;color:#fff;width:100%}
+.eyebrow{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:600;opacity:.85;margin-bottom:10px;
+}
+h1{
+  font-size:clamp(34px,10vw,46px);line-height:1.02;font-weight:700;
+  letter-spacing:-.025em;margin-bottom:10px;
+}
+.tagline{font-size:17px;line-height:1.4;opacity:.9;max-width:22ch}
+.status{
+  display:inline-flex;align-items:center;gap:7px;margin-top:16px;
+  font-size:14px;font-weight:600;
+}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ADE80}
+.dot.shut{background:#9CA3AF}
+
+/* ---------- ACTIONS ---------- */
+.actions{display:flex;gap:10px;margin-top:20px}
+.btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:52px;padding:0 16px;border-radius:var(--radius);
+  font-size:16px;font-weight:600;text-decoration:none;border:0;
+}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(6px)}
+.btn:active{transform:translateY(1px)}
+
+/* ---------- SECTION ---------- */
+main{padding:36px var(--pad) 8px}
+.sec-head{margin-bottom:20px}
+h2{font-size:26px;letter-spacing:-.02em;font-weight:700;margin-bottom:6px}
+.sec-note{color:var(--muted);font-size:15px}
+
+.items{list-style:none}
+.item{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:15px 0;border-bottom:1px solid var(--line);
+}
+.item:last-child{border-bottom:0}
+.item-name{font-weight:600;font-size:17px}
+.item-desc{color:var(--muted);font-size:14px;margin-top:3px;line-height:1.4}
+.item-price{font-weight:600;font-size:17px;white-space:nowrap;color:var(--accent)}
+
+/* ---------- THE ONE OPEN LOOP ---------- */
+/* Exactly one of these per demo. Never two. It shows the shape of what
+   they'd be buying without you having built it. */
+.locked{
+  width:100%;margin:28px 0 4px;min-height:52px;border-radius:var(--radius);
+  background:rgba(22,19,15,.06);color:#A5A098;border:1px dashed var(--line);
+  font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:not-allowed;
+}
+.locked small{font-weight:500;font-size:13px;opacity:.9}
+
+/* ---------- FOOTER ---------- */
+footer{padding:32px var(--pad) 40px;border-top:1px solid var(--line);margin-top:28px}
+.f-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:15px}
+.f-row span:first-child{color:var(--muted)}
+.f-row.today{font-weight:600}
+.addr{font-size:16px;line-height:1.5;margin-bottom:20px}
+.addr a{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* ---------- STICKY BAR (the phone-demo money shot) ---------- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:5;
+  display:flex;gap:10px;padding:12px var(--pad);
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+  background:rgba(251,249,246,.94);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);
+}
+.bar .btn-ghost{background:rgba(22,19,15,.06);color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(min-width:640px){
+  body{max-width:520px;margin:0 auto;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .bar{max-width:520px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Photo MUST be a local file next to this one, or the demo dies without signal. -->
+<header class="hero">
+  <img src="hero.jpg" alt="{{BUSINESS_NAME}}">
+  <div class="hero-body">
+    <p class="eyebrow">{{SUBURB}}</p>
+    <h1>{{BUSINESS_NAME}}</h1>
+    <p class="tagline">{{TAGLINE}}</p>
+    <p class="status"><span class="dot"></span>{{OPEN_STATUS}}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="tel:{{PHONE_RAW}}">{{PRIMARY_CTA}}</a>
+      <a class="btn btn-ghost" href="{{MAPS_URL}}">Directions</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="sec-head">
+    <h2>{{SECTION_TITLE}}</h2>
+    <p class="sec-note">{{SECTION_NOTE}}</p>
+  </div>
+
+  <ul class="items">
+    <!-- Repeat. Drop .item-price entirely if the price isn't verified —
+         an absent price is fine, a wrong one is fatal. -->
+    <li class="item">
+      <div>
+        <div class="item-name">{{ITEM_NAME}}</div>
+        <div class="item-desc">{{ITEM_DESC}}</div>
+      </div>
+      <div class="item-price">{{ITEM_PRICE}}</div>
+    </li>
+  </ul>
+
+  <div class="locked">{{LOCKED_LABEL}} <small>— coming soon</small></div>
+</main>
+
+<footer>
+  <p class="addr">
+    {{ADDRESS_LINE_1}}<br>{{ADDRESS_LINE_2}}<br>
+    <a href="tel:{{PHONE_RAW}}">{{PHONE_DISPLAY}}</a>
+  </p>
+  <div class="f-row today"><span>{{TODAY_NAME}}</span><span>{{TODAY_HOURS}}</span></div>
+  <!-- Repeat for remaining days. Only hours you can actually verify. -->
+  <div class="f-row"><span>{{DAY}}</span><span>{{HOURS}}</span></div>
+</footer>
+
+<nav class="bar">
+  <a class="btn btn-primary" href="tel:{{PHONE_RAW}}">{{PRIMARY_CTA}}</a>
+  <a class="btn btn-ghost" href="{{MAPS_URL}}">Directions</a>
+</nav>
+
+</body>
+</html>

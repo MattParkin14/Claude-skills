@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{VENUE}} — menu editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="board.css">
+<link rel="stylesheet" href="editor.css">
+
+<body class="t-{{TINT}}">
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <filter id="chalk" x="-6%" y="-14%" width="112%" height="128%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4" seed="12" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.7"
+                       xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<header class="bar">
+  <div class="mark"><b>{{VENUE}}</b><span>menu board</span></div>
+  <div class="ctl"><span>Board</span><div class="swatches" id="tints"></div></div>
+  <button class="btn" id="plain" aria-pressed="false">Plain mode</button>
+  <button class="btn" id="print">Print for the door</button>
+  <button class="btn" id="save">Save</button>
+</header>
+
+<div class="wrap">
+  <div class="pane">
+    <h2>Menu text</h2>
+    <textarea id="src" spellcheck="false" aria-label="Menu text"></textarea>
+    <div class="key">
+      <code>#</code> board name &nbsp;·&nbsp; <code>==</code> section &nbsp;·&nbsp;
+      <code>|</code> price &nbsp;·&nbsp; indent a line for the description &nbsp;·&nbsp;
+      <code>!</code> notice &nbsp;·&nbsp; <code>//</code> a note to yourself, never shown
+    </div>
+    <details><summary>What gets saved</summary><pre id="json"></pre></details>
+    <p class="hint" id="hint"></p>
+  </div>
+
+  <div class="stage">
+    <div class="options" id="options" role="group" aria-label="Edge treatment"></div>
+    <div class="frame e-{{EDGE}}" id="frame">
+      <div class="board" id="board">
+        <div class="smudge" style="width:180px;height:70px;top:14%;left:8%"></div>
+        <div class="smudge" style="width:230px;height:60px;bottom:22%;right:6%"></div>
+        <div id="out"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="menu-data" type="application/json">{{MENU_JSON}}</script>
+<script src="parser.js"></script>
+<script>
+var data = JSON.parse(document.getElementById('menu-data').textContent);
+
+var EDGES = [
+  {id:'drawn', name:'Drawn rule',  note:'border chalked on the slate itself'},
+  {id:'bleed', name:'Bleed',       note:'no edge — slate runs to the corners'},
+  {id:'steel', name:'Steel rim',   note:'thin powder-coated lip'},
+  {id:'brass', name:'Brass mount', note:'hairline held off the board'}
+];
+var TINTS = [
+  {id:'slate',    name:'Slate green', hex:'#1E2723'},
+  {id:'charcoal', name:'Charcoal',    hex:'#22211F'},
+  {id:'navy',     name:'Deep navy',   hex:'#1A2230'}
+];
+
+var src = document.getElementById('src');
+var out = document.getElementById('out');
+var jsonEl = document.getElementById('json');
+var frame = document.getElementById('frame');
+var hint = document.getElementById('hint');
+
+function current(){
+  return {
+    slug: data.slug,
+    venue: data.venue,
+    edge: document.querySelector('.opt[aria-pressed="true"]').dataset.id,
+    tint: document.querySelector('.sw[aria-pressed="true"]').dataset.id,
+    updated: new Date().toISOString().slice(0,10),
+    source: src.value
+  };
+}
+
+function update(){
+  out.innerHTML = renderMenu(parseMenu(src.value), {
+    updated: new Date(), emptyText: 'Type a menu on the left and it appears here.'
+  });
+  jsonEl.textContent = JSON.stringify(current(), null, 2);
+}
+
+var options = document.getElementById('options');
+EDGES.forEach(function(f){
+  var b = document.createElement('button');
+  b.className = 'opt'; b.dataset.id = f.id;
+  b.setAttribute('aria-pressed', String(f.id === data.edge));
+  b.innerHTML =
+    '<figure style="margin:0"><div class="frame mini e-' + f.id + '"><div class="board mini">' +
+    '<div class="l l1"></div><div class="l l2"></div><div class="l l3"></div><div class="l l4"></div>' +
+    '</div></div><figcaption><b>' + f.name + '</b>' + f.note + '</figcaption></figure>';
+  b.onclick = function(){
+    document.querySelectorAll('.opt').forEach(function(o){ o.setAttribute('aria-pressed','false'); });
+    b.setAttribute('aria-pressed','true');
+    frame.className = 'frame e-' + f.id;
+    update();
+  };
+  options.appendChild(b);
+});
+
+var tints = document.getElementById('tints');
+TINTS.forEach(function(t){
+  var b = document.createElement('button');
+  b.className = 'sw'; b.style.background = t.hex; b.dataset.id = t.id;
+  b.title = t.name; b.setAttribute('aria-label', t.name);
+  b.setAttribute('aria-pressed', String(t.id === data.tint));
+  b.onclick = function(){
+    document.querySelectorAll('.sw').forEach(function(s){ s.setAttribute('aria-pressed','false'); });
+    b.setAttribute('aria-pressed','true');
+    document.body.className = 't-' + t.id + (document.body.classList.contains('plain') ? ' plain' : '');
+    update();
+  };
+  tints.appendChild(b);
+});
+
+document.getElementById('plain').onclick = function(e){
+  var on = document.body.classList.toggle('plain');
+  e.currentTarget.setAttribute('aria-pressed', String(on));
+};
+document.getElementById('print').onclick = function(){ window.print(); };
+
+/* Save posts to your own endpoint. Until one exists, it hands back the file
+   so nothing is lost and the demo still tells the truth about what happens. */
+document.getElementById('save').onclick = function(){
+  var payload = JSON.stringify(current(), null, 2);
+  fetch('/api/menu/' + data.slug, {
+    method:'PUT', headers:{'Content-Type':'application/json'}, body:payload
+  }).then(function(r){
+    hint.textContent = r.ok ? 'Saved. The board updates in about a minute.'
+                            : 'Could not save — the server said no.';
+  }).catch(function(){
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([payload], {type:'application/json'}));
+    a.download = 'menu.json'; a.click();
+    hint.textContent = 'No save endpoint yet — downloaded menu.json instead.';
+  });
+};
+
+src.value = data.source;
+src.addEventListener('input', update);
+update();
+</script>
+</body>
+</html>
